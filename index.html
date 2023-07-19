@@ -4,9 +4,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Weather App</title>
 </head>
-<body>
+<body class="my-class">
+
+    <section class="bubble">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Weather</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">About <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item active">
+                    <a class="nav-link" href="#">Contact <span class="sr-only">(current)</span></a>
+                  </li>
+              </ul>
+            </div>
+          </nav>
+
+
+        <div class="cardy">
+            <div class="row">
+                <input type="text" id="search" placeholder="Enter City">
+                <button" id="btn"><img id="searchbtn" src="./images/search.png" alt="Search button"></button>
+                
+            </div>
+            <div class="weather">
+                <img id="temp" src="./images/sunny.png" alt="Temp">
+                <h1 id="temperature">22°C</h1>
+                <h2 id="city">City</h2>
+            </div>
+
+            <div class="details">
+                <div class="col">
+                    <img id="hum" src="./images/temperature.png" alt="humidity">
+                    <div>
+                        <p id="per">55%</p>
+                        <p>Humidity</p>
+                    </div>
+                    
+
+                </div>
+                <div class="col">
+                    <img id="wind" src="./images/wind.png" alt="wind speed">
+                    <div>
+                        <p id="speed">5.66 km/h</p>
+                        <p>Wind Speed</p>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+const weathericon = document.getElementById('temp');
+const Searchbtn = document.getElementById('searchbtn');
+const Searchbox = document.getElementById('search');
+const Citybox = document.getElementById('city');
+const Temp = document.getElementById('temperature');
+const wind = document.getElementById('speed');
+const humidity = document.getElementById('per');
+const geoapiKey = 'n8tDzVkUHDkeLwWpEAQNvw==aNze63gWYnaaYISO';
+const WebapiKey = "33236341ae58b446efb5d79dbd48fc44";
+const Webapiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&";
+var result;
+var lon;
+var lat;
+
+
+
+
+Searchbtn.addEventListener('click', ()=>{
+
+    var city = document.querySelector('input').value;
+    var geourl = 'https://api.api-ninjas.com/v1/geocoding?city=' + city;
+    var http = new XMLHttpRequest();
+    http.open('GET', geourl, true);
+    http.setRequestHeader('X-Api-Key', geoapiKey);
+    http.setRequestHeader('Content-Type', 'application/json');
+    
+    http.onload = function() {
+    if (http.status === 200) {
+        result = JSON.parse(http.responseText);
+        lat = result[0].latitude;
+        lon = result[0].longitude;
+
+        console.log(result);
+    } else {
+        console.error('Error: ' + http.status);
+    }
+    };
+
+    http.onerror = function() {
+    console.error('Request failed');
+    };
+    http.send();
+
+    
+    
+})
+
+
+async function CheckWeather(lon,lat) {
+
+    const response = await fetch(WebapiKey + `&lat=${lat}&lon=${lon}&appid=${WebapiKey}`);
+    const data = await response.json();
+
+    Citybox.innerHTML= data.name;
+    Temp.innerText=Math.round(data.main.temp) + "°C";
+    wind.innerText=data.main.speed + "km/h";
+    humidity.innerText = data.main.humidity + "%";
+
+    if (data.weather[0].main == "Clouds") {
+       weathericon.src = "./images/clouds.png";
+    }
+    else if(data.weather[0].main == "Clouds"){
+
+    }
+
+
+
+
+
+    
+}
+
+
+
+
+
+
+
+
+
+    </script>
     
 </body>
 </html>
