@@ -1,6 +1,6 @@
 .my-class {
      
- background: rgb(65, 65, 65);
+ background:  linear-gradient(135deg, #00feba , #5b5481);
   }
   
 
@@ -21,11 +21,12 @@
 
     text-align: center;
     margin: 100px auto 0;
-    padding: 30px 35px;
+    padding: 35px 35px;
     background: linear-gradient(135deg, #00feba , #5b5481);
     max-width: 470px;
     width: 50%;
     border-radius: 30px;
+    
 
 }
 
@@ -67,13 +68,24 @@
 .details{
     display: flex;
     align-items: center;
+    display: none;
 }
+.weather{
+
+    display: none;
+}
+
+
 #temp{
     margin-top: 20px;
     height: 100px;
     width: 100px;
 }
-
+.error{
+    color: red;
+    float: left;
+    margin-top: 5px;
+}
 
 #wind , #hum{
     float: left;
@@ -84,7 +96,7 @@
 }
 #speed ,#per{
 
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 15px;
 }
 
@@ -100,4 +112,9 @@
     background-color: #0f0f10;
     border-radius: 50px;
     
+}
+
+li:hover{
+    top: -0.5px;
+    box-shadow: 0 3px rgb(16, 210, 236);
 }

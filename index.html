@@ -10,7 +10,7 @@
 <body class="my-class">
 
     <section class="bubble">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Weather</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -34,13 +34,15 @@
 
         <div class="cardy">
             <div class="row">
-                <input type="text" id="search" placeholder="Enter City">
+                <input type="text" id="search" placeholder="Enter City Name">
                 <button" id="btn"><img id="searchbtn" src="./images/search.png" alt="Search button"></button>
+
                 
             </div>
+            <div class="error" style="display: none;"> Invalid Response</div>
             <div class="weather">
                 <img id="temp" src="./images/sunny.png" alt="Temp">
-                <h1 id="temperature">22°C</h1>
+                <b> <h1 id="temperature"></h1></b>
                 <h2 id="city">City</h2>
             </div>
 
@@ -48,7 +50,7 @@
                 <div class="col">
                     <img id="hum" src="./images/temperature.png" alt="humidity">
                     <div>
-                        <p id="per">55%</p>
+                        <b><p id="per"></p></b>
                         <p>Humidity</p>
                     </div>
                     
@@ -57,7 +59,7 @@
                 <div class="col">
                     <img id="wind" src="./images/wind.png" alt="wind speed">
                     <div>
-                        <p id="speed">5.66 km/h</p>
+                        <b><p id="speed"></p></b>
                         <p>Wind Speed</p>
                     </div>
                 
@@ -83,7 +85,8 @@ var lat;
 
 
 
-Searchbtn.addEventListener('click', ()=>{
+Searchbtn.addEventListener('click', (e)=>{
+
 
     var city = document.querySelector('input').value;
     var geourl = 'https://api.api-ninjas.com/v1/geocoding?city=' + city;
@@ -97,10 +100,11 @@ Searchbtn.addEventListener('click', ()=>{
         result = JSON.parse(http.responseText);
         lat = result[0].latitude;
         lon = result[0].longitude;
-
         console.log(result);
-    } else {
-        console.error('Error: ' + http.status);
+        CheckWeather();
+    }
+    else {
+        document.querySelector(".error").style.display="block";
     }
     };
 
@@ -108,42 +112,24 @@ Searchbtn.addEventListener('click', ()=>{
     console.error('Request failed');
     };
     http.send();
-
-    
-    
 })
 
 
-async function CheckWeather(lon,lat) {
-
-    const response = await fetch(WebapiKey + `&lat=${lat}&lon=${lon}&appid=${WebapiKey}`);
+async function CheckWeather() {
+    document.querySelector(".error").style.display="none";
+    const response = await fetch(Webapiurl + `lat=${lat}&lon=${lon}&appid=${WebapiKey}`);
     const data = await response.json();
-
-    Citybox.innerHTML= data.name;
-    Temp.innerText=Math.round(data.main.temp) + "°C";
-    wind.innerText=data.main.speed + "km/h";
-    humidity.innerText = data.main.humidity + "%";
-
-    if (data.weather[0].main == "Clouds") {
-       weathericon.src = "./images/clouds.png";
+    if (response.status === 200) {
+        document.querySelector(".weather").style.display = "block";
+        document.querySelector(".details").style.display = "flex";
+        Citybox.innerHTML = data.name;
+        Temp.innerText = Math.round(data.main.temp) + "°C";
+        wind.innerText = data.wind.speed + " km/h";
+        humidity.innerText = data.main.humidity + "%";
+    } else {
+        document.querySelector(".error").style.display="block";
     }
-    else if(data.weather[0].main == "Clouds"){
-
-    }
-
-
-
-
-
-    
 }
-
-
-
-
-
-
-
 
 
     </script>
